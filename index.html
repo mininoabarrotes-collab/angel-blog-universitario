@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Angel | Bitácora Universitaria de Ingeniería en Innovación Agrícola Sustentable</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            agro: {
+              50: '#f2f8f4',
+              100: '#dfeee4',
+              200: '#c0ddcb',
+              300: '#95c4a8',
+              400: '#64a580',
+              500: '#428762',
+              600: '#306b4c',
+              700: '#27553e',
+              800: '#214533',
+              900: '#1c392b',
+              950: '#0f2018',
+            },
+            earth: {
+              50: '#faf8f5',
+              100: '#f3efe6',
+              200: '#e5dccb',
+              600: '#8c6d46',
+              800: '#57432b',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .tab-active {
+      background-color: #27553e;
+      color: #ffffff;
+    }
+    .fade-in {
+      animation: fadeIn 0.35s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-earth-50 text-slate-800 antialiased selection:bg-agro-200 selection:text-agro-900 flex flex-col min-h-screen">
+
+  <!-- Barra de navegación superior -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-agro-100 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Identidad del Blog -->
+        <button onclick="navigateTo('inicio')" class="flex items-center gap-3 text-left group focus:outline-none">
+          <div class="w-10 h-10 rounded-xl bg-agro-700 text-white flex items-center justify-center font-bold text-lg shadow-sm group-hover:bg-agro-800 transition">
+            <!-- Icono hoja/brote SVG -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8m0 0C12 8.5 16 5 20 5c0 4.5-3.5 8-8 8zm0 0C12 9.5 8.5 7 5 7c0 3.5 3 6 7 6z" />
+            </svg>
+          </div>
+          <div>
+            <span class="block font-extrabold text-xl tracking-tight text-agro-900 leading-none">Angel</span>
+            <span class="block text-xs font-medium text-agro-600 mt-0.5">Bitácora Universitaria · IIAS</span>
+          </div>
+        </button>
+
+        <!-- Menú principal escritorio -->
+        <nav class="hidden md:flex items-center gap-2" aria-label="Navegación principal">
+          <button id="nav-inicio" onclick="navigateTo('inicio')" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition tab-active">
+            Inicio
+          </button>
+          <button id="nav-sobre-mi" onclick="navigateTo('sobre-mi')" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-agro-50 hover:text-agro-800 transition">
+            Sobre mí
+          </button>
+          <button id="nav-materias" onclick="navigateTo('materias')" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-agro-50 hover:text-agro-800 transition">
+            Mis materias
+          </button>
+        </nav>
+
+        <!-- Botón menú móvil -->
+        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl text-slate-700 hover:bg-agro-50 focus:outline-none" aria-label="Abrir menú">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menú desplegable móvil -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-agro-100 px-4 pt-2 pb-4 space-y-1">
+      <button onclick="navigateTo('inicio'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-agro-900 bg-agro-50">
+        Inicio
+      </button>
+      <button onclick="navigateTo('sobre-mi'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-agro-50">
+        Sobre mí
+      </button>
+      <button onclick="navigateTo('materias'); toggleMobileMenu();" class="w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 hover:bg-agro-50">
+        Mis materias
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+
+    <!-- ========================================================= -->
+    <!-- SECCIÓN 1: PÁGINA DE INICIO                               -->
+    <!-- ========================================================= -->
+    <section id="section-inicio" class="page-section fade-in space-y-10">
+      <!-- Hero principal -->
+      <div class="bg-gradient-to-br from-agro-900 via-agro-800 to-agro-700 rounded-3xl p-7 sm:p-12 text-white shadow-lg relative overflow-hidden">
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-8">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/15 text-agro-100 backdrop-blur-sm mb-5">
+              <span class="w-2 h-2 rounded-full bg-emerald-300"></span>
+              TSJ Tala · Grupo 1-B · Portafolio Digital
+            </span>
+            <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-3">
+              Angel
+            </h1>
+            <p class="text-lg sm:text-xl font-medium text-agro-100 mb-6">
+              Mi bitácora universitaria de Ingeniería en Innovación Agrícola Sustentable
+            </p>
+            <p class="text-base sm:text-lg text-white/90 leading-relaxed mb-8">
+              Bienvenido a mi blog. Soy <strong>Ángel Guadalupe Morán Godínez</strong>, estudiante de Ingeniería en Innovación Agrícola Sustentable (IIAS) en el TSJ Tala. Aquí comparto lo que aprendo en mis materias, mis proyectos y mis reflexiones sobre el campo, la agricultura regenerativa y las nuevas tecnologías agronómicas. Puedes conocerme en la sección <strong>Sobre mí</strong> o recorrer las entradas de cada materia en <strong>Mis materias</strong>.
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="navigateTo('materias')" class="px-6 py-3 rounded-xl bg-white text-agro-900 font-bold text-sm hover:bg-agro-50 transition shadow-sm">
+                Explorar Mis materias
+              </button>
+              <button onclick="navigateTo('sobre-mi')" class="px-6 py-3 rounded-xl bg-agro-600/60 border border-white/25 text-white font-semibold text-sm hover:bg-agro-600 transition">
+                Conocer más sobre mí
+              </button>
+            </div>
+          </div>
+
+          <!-- Fotografía con sombrero en portada de Inicio -->
+          <div class="lg:col-span-4 flex justify-center">
+            <div class="relative w-full max-w-[280px] aspect-[4/5] rounded-2xl overflow-hidden border-4 border-white/20 shadow-xl bg-agro-950">
+              <img
+                src="b1e5868a-4f8f-4dd4-a49d-1841e44c7024.webp"
+                onerror="this.onerror=null;this.src='https://placehold.co/500x625/214533/ffffff?text=Angel+Moran';"
+                alt="Ángel Guadalupe Morán Godínez"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+          </div>
+        </div>
+        <!-- Decoración geométrica sutil -->
+        <div class="hidden lg:block absolute -right-12 -bottom-12 w-80 h-80 rounded-full bg-white/5 pointer-events-none"></div>
+        <div class="hidden lg:block absolute right-16 top-8 w-40 h-40 rounded-full bg-emerald-400/10 pointer-events-none"></div>
+      </div>
+
+      <!-- Vista previa rápida de materias en Inicio -->
+      <div>
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-2">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Entradas recientes por materia</h2>
+            <p class="text-sm text-slate-600 mt-1">Selecciona una asignatura para ir directamente a su publicación y evidencia de trabajo.</p>
+          </div>
+          <button onclick="navigateTo('materias')" class="text-sm font-semibold text-agro-700 hover:text-agro-900 inline-flex items-center gap-1">
+            Ver todas las materias
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Card 1 -->
+          <article onclick="openSubject('Química')" class="cursor-pointer bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-agro-300 transition flex flex-col justify-between">
+            <div>
+              <span class="inline-block px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 mb-3">Química</span>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">Química en el campo: ácidos, hidróxidos y sales en el suelo</h3>
+              <p class="text-sm text-slate-600 line-clamp-3">
+                Clasificación de compuestos inorgánicos y su efecto directo en el pH del suelo agrícola mediante iones H⁺ y OH⁻.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-agro-700">
+              <span>Leer entrada completa</span>
+              <span>→</span>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article onclick="openSubject('Biología')" class="cursor-pointer bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-agro-300 transition flex flex-col justify-between">
+            <div>
+              <span class="inline-block px-3 py-1 rounded-lg text-xs font-semibold bg-teal-50 text-teal-700 mb-3">Biología</span>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">ADN, ARN y la regla de Chargaff aplicada a cultivos</h3>
+              <p class="text-sm text-slate-600 line-clamp-3">
+                Estructura de nucleótidos, diferencias entre ADN y ARN, y cálculo práctico de bases nitrogenadas en un fragmento de ADN de chile.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-agro-700">
+              <span>Leer entrada completa</span>
+              <span>→</span>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article onclick="openSubject('Mecánica')" class="cursor-pointer bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-agro-300 transition flex flex-col justify-between">
+            <div>
+              <span class="inline-block px-3 py-1 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 mb-3">Taller de elementos de mecánica de sólidos</span>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">Ley de Hooke: la elasticidad y sus ejemplos en el campo</h3>
+              <p class="text-sm text-slate-600 line-clamp-3">
+                Deformación elástica (F = k · x), límite elástico en tallos de cultivos ante el viento e implementos agrícolas.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-agro-700">
+              <span>Leer entrada completa</span>
+              <span>→</span>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article onclick="openSubject('Álgebra')" class="cursor-pointer bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md hover:border-agro-300 transition flex flex-col justify-between">
+            <div>
+              <span class="inline-block px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 mb-3">Álgebra lineal</span>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">Rango de una matriz con el método de menores</h3>
+              <p class="text-sm text-slate-600 line-clamp-3">
+                Independencia lineal, determinantes de submatrices y su utilidad para resolver sistemas en mezclas de fertilizantes NPK.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-agro-700">
+              <span>Leer entrada completa</span>
+              <span>→</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECCIÓN 2: PÁGINA SOBRE MÍ                                -->
+    <!-- ========================================================= -->
+    <section id="section-sobre-mi" class="page-section hidden fade-in space-y-8">
+      <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <!-- Columna de Imagen / Foto en el gym -->
+          <div class="lg:col-span-5">
+            <div class="relative rounded-2xl overflow-hidden bg-agro-100 border border-agro-200 shadow-inner aspect-[4/5] flex flex-col justify-between">
+              <img
+                src="WhatsApp Image 2026-11-24 at 11.22.39 PM.jpeg"
+                onerror="this.onerror=null;this.src='https://placehold.co/600x750/27553e/ffffff?text=Angel+Moran+%7C+Gym';"
+                alt="Ángel Guadalupe Morán Godínez en el gimnasio"
+                class="w-full h-full object-cover object-center"
+              />
+              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-5 text-white">
+                <p class="text-xs uppercase tracking-wider text-agro-200 font-semibold">La Estanzuela · Teuchitlán, Jalisco</p>
+                <p class="text-lg font-bold">Ángel Guadalupe Morán Godínez</p>
+                <p class="text-xs text-white/80 mt-0.5">Estudiante de IIAS · TSJ Tala (Grupo 1-B)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna de Biografía -->
+          <div class="lg:col-span-7 space-y-6">
+            <div>
+              <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-agro-100 text-agro-800 mb-2">Perfil Personal</span>
+              <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Sobre mí</h1>
+            </div>
+
+            <div class="space-y-5">
+              <div class="bg-earth-50 rounded-2xl p-5 border border-earth-200/70">
+                <h2 class="text-base font-bold text-agro-900 flex items-center gap-2 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-agro-600"></span>
+                  Quién soy
+                </h2>
+                <p class="text-slate-700 leading-relaxed text-sm sm:text-base">
+                  Me llamo <strong>Ángel Guadalupe Morán Godínez</strong> y soy de <strong>La Estanzuela</strong>, municipio de <strong>Teuchitlán, Jalisco</strong>. Actualmente estudio <strong>Ingeniería en Innovación Agrícola Sustentable (IIAS)</strong> en el Tecnológico Superior de Jalisco, <strong>TSJ Tala</strong>, en el <strong>grupo 1-B</strong>.
+                </p>
+              </div>
+
+              <div class="bg-earth-50 rounded-2xl p-5 border border-earth-200/70">
+                <h2 class="text-base font-bold text-agro-900 flex items-center gap-2 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-agro-600"></span>
+                  Por qué elegí mi carrera
+                </h2>
+                <p class="text-slate-700 leading-relaxed text-sm sm:text-base">
+                  Elegí esta carrera porque me gusta el trabajo al aire libre y desde niño me ha llamado la atención la vida relacionada con el campo.
+                </p>
+              </div>
+
+              <div class="bg-earth-50 rounded-2xl p-5 border border-earth-200/70">
+                <h2 class="text-base font-bold text-agro-900 flex items-center gap-2 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-agro-600"></span>
+                  Lo que me gusta
+                </h2>
+                <p class="text-slate-700 leading-relaxed text-sm sm:text-base">
+                  Fuera del aula me gusta ir al <strong>gym</strong> y salir con mis amigos por un <strong>aguachile</strong>.
+                </p>
+              </div>
+
+              <div class="bg-agro-50 rounded-2xl p-5 border border-agro-200">
+                <h2 class="text-base font-bold text-agro-900 flex items-center gap-2 mb-2">
+                  <span class="w-2 h-2 rounded-full bg-agro-700"></span>
+                  Mis metas profesionales
+                </h2>
+                <p class="text-slate-800 leading-relaxed text-sm sm:text-base">
+                  Quiero aprender lo máximo posible del campo y ponerlo en práctica. Me interesa especialmente la <strong>agricultura regenerativa</strong> y el uso de las <strong>nuevas tecnologías y técnicas agronómicas</strong>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECCIÓN 3: PÁGINA MIS MATERIAS (BITÁCORA ACADÉMICA)       -->
+    <!-- ========================================================= -->
+    <section id="section-materias" class="page-section hidden fade-in space-y-8">
+      <!-- Encabezado e introducción de Mis materias -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-agro-100 text-agro-800 mb-2">Bitácora Académica</span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3">Mis materias</h1>
+        <p class="text-slate-700 text-base leading-relaxed max-w-4xl">
+          Aquí documento lo que aprendo en cada materia: un resumen o reflexión, una evidencia de mi trabajo y un recurso que me ayudó a entender mejor el tema. Mis materias son <strong>Química</strong>, <strong>Biología</strong>, <strong>Taller de elementos de mecánica de sólidos</strong> y <strong>Álgebra lineal</strong>.
+        </p>
+
+        <!-- Filtros por categoría/materia -->
+        <div class="mt-6 pt-5 border-t border-slate-100 flex flex-wrap gap-2" role="tablist" aria-label="Filtrar entradas por materia">
+          <button onclick="filterPosts('Todas')" data-filter="Todas" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-agro-700 text-white transition">
+            Todas las materias (4)
+          </button>
+          <button onclick="filterPosts('Química')" data-filter="Química" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-agro-50 transition">
+            Química
+          </button>
+          <button onclick="filterPosts('Biología')" data-filter="Biología" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-agro-50 transition">
+            Biología
+          </button>
+          <button onclick="filterPosts('Mecánica')" data-filter="Mecánica" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-agro-50 transition">
+            Taller de elementos de mecánica de sólidos
+          </button>
+          <button onclick="filterPosts('Álgebra')" data-filter="Álgebra" class="filter-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-agro-50 transition">
+            Álgebra lineal
+          </button>
+        </div>
+      </div>
+
+      <!-- Contenedor de Entradas -->
+      <div class="space-y-8">
+
+        <!-- ======================================================= -->
+        <!-- ENTRADA 1: QUÍMICA                                      -->
+        <!-- ======================================================= -->
+        <article data-category="Química" class="post-card bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-12">
+            <!-- Multimedia de la entrada -->
+            <div class="lg:col-span-4 bg-emerald-900 relative min-h-[240px]">
+              <img
+                src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=800&q=80"
+                onerror="this.onerror=null;this.src='https://placehold.co/600x500/27553e/ffffff?text=Quimica+del+Suelo';"
+                alt="Cultivo agrícola y suelo fértil"
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/95 text-emerald-800 shadow-sm">
+                  Categoría: Química
+                </span>
+              </div>
+            </div>
+
+            <!-- Contenido de la entrada -->
+            <div class="lg:col-span-8 p-6 sm:p-8 space-y-5">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-agro-600">Entrada 1 · Bitácora IIAS</p>
+                <h2 class="text-2xl font-extrabold text-slate-900 mt-1">
+                  Química en el campo: ácidos, hidróxidos y sales en el suelo
+                </h2>
+              </div>
+
+              <!-- Resumen y reflexión -->
+              <div>
+                <h3 class="text-sm font-bold uppercase tracking-wide text-slate-500 mb-2">Resumen y reflexión</h3>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                  En química hemos visto cómo clasificar y nombrar los compuestos inorgánicos (óxidos, anhídridos, hidróxidos, ácidos y sales) y cómo escribir sus fórmulas cruzando valencias. Lo que más me gustó es que todo se relaciona con el campo: el pH del suelo cambia según los compuestos que se le aplican. Un ácido libera iones H⁺ y baja el pH, y un hidróxido libera iones OH⁻ y lo sube. Aprendí que no basta con aplicar un fertilizante, también hay que conocer cómo afecta al suelo.
+                </p>
+              </div>
+
+              <!-- Evidencia de trabajo -->
+              <div class="bg-emerald-50/70 rounded-2xl p-5 border border-emerald-200/80">
+                <h3 class="text-sm font-bold text-emerald-950 mb-3 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Evidencia de trabajo: Compuestos revisados y su efecto en el campo
+                </h3>
+                <ul class="space-y-2 text-sm text-slate-800">
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-emerald-700">•</span>
+                    <span><strong>Carbonato de calcio (CaCO₃):</strong> es una sal que corrige la acidez porque el carbonato consume iones H⁺ y el pH sube.</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-emerald-700">•</span>
+                    <span><strong>Hidróxido de calcio (Ca(OH)₂):</strong> es un hidróxido que neutraliza la acidez del suelo o del agua de riego.</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-emerald-700">•</span>
+                    <span><strong>Nitrato de potasio (KNO₃):</strong> es una sal que aporta potasio y nitrógeno.</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-emerald-700">•</span>
+                    <span><strong>Sulfato de amonio ((NH₄)₂SO₄):</strong> es una sal que aporta nitrógeno y azufre, pero su uso repetido puede acidificar el suelo.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Recurso recomendado -->
+              <div class="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-100">
+                <div class="text-sm text-slate-600">
+                  <strong class="text-slate-900">Recurso recomendado:</strong> Khan Academy en español, que explica paso a paso temas de ciencias.
+                </div>
+                <a href="https://es.khanacademy.org" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-agro-700 text-white text-xs font-semibold hover:bg-agro-800 transition shrink-0">
+                  Visitar Khan Academy
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ======================================================= -->
+        <!-- ENTRADA 2: BIOLOGÍA                                     -->
+        <!-- ======================================================= -->
+        <article data-category="Biología" class="post-card bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-12">
+            <!-- Multimedia: Esquema SVG de Doble Hélice de ADN y Regla de Chargaff -->
+            <div class="lg:col-span-4 bg-teal-950 p-6 flex flex-col items-center justify-center text-white relative">
+              <span class="absolute top-4 left-4 px-3 py-1.5 rounded-xl text-xs font-bold bg-white/95 text-teal-900 shadow-sm">
+                Categoría: Biología
+              </span>
+              <!-- Diagrama SVG de Doble Hélice de ADN -->
+              <svg viewBox="0 0 220 240" class="w-48 h-52 mt-6" aria-label="Esquema de la doble hélice del ADN y apareamiento de bases A-T y C-G">
+                <!-- Pares de bases -->
+                <line x1="65" y1="35" x2="155" y2="35" stroke="#5eead4" stroke-width="4" stroke-linecap="round"/>
+                <text x="110" y="30" fill="#ccfbf1" font-size="10" font-weight="bold" text-anchor="middle">A = T (21% / 21%)</text>
+
+                <line x1="75" y1="70" x2="145" y2="70" stroke="#fcd34d" stroke-width="4" stroke-linecap="round"/>
+                <text x="110" y="65" fill="#fef3c7" font-size="10" font-weight="bold" text-anchor="middle">C ≡ G (29% / 29%)</text>
+
+                <line x1="75" y1="125" x2="145" y2="125" stroke="#5eead4" stroke-width="4" stroke-linecap="round"/>
+                <text x="110" y="120" fill="#ccfbf1" font-size="10" font-weight="bold" text-anchor="middle">T = A</text>
+
+                <line x1="65" y1="160" x2="155" y2="160" stroke="#fcd34d" stroke-width="4" stroke-linecap="round"/>
+                <text x="110" y="155" fill="#fef3c7" font-size="10" font-weight="bold" text-anchor="middle">G ≡ C</text>
+
+                <line x1="75" y1="195" x2="145" y2="195" stroke="#5eead4" stroke-width="4" stroke-linecap="round"/>
+                <text x="110" y="190" fill="#ccfbf1" font-size="10" font-weight="bold" text-anchor="middle">A = T</text>
+
+                <!-- Cadenas azucar-fosfato -->
+                <path d="M 55 15 C 55 65, 165 85, 165 135 C 165 185, 55 200, 55 225" fill="none" stroke="#34d399" stroke-width="6" stroke-linecap="round"/>
+                <path d="M 165 15 C 165 65, 55 85, 55 135 C 55 185, 165 200, 165 225" fill="none" stroke="#2dd4bf" stroke-width="6" stroke-linecap="round"/>
+              </svg>
+              <p class="text-xs text-teal-200 text-center mt-2">
+                Esquema de doble hélice de ADN y complementariedad de bases (Regla de Chargaff)
+              </p>
+            </div>
+
+            <!-- Contenido de la entrada -->
+            <div class="lg:col-span-8 p-6 sm:p-8 space-y-5">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-agro-600">Entrada 2 · Bitácora IIAS</p>
+                <h2 class="text-2xl font-extrabold text-slate-900 mt-1">
+                  ADN, ARN y la regla de Chargaff aplicada a cultivos
+                </h2>
+              </div>
+
+              <!-- Resumen y reflexión -->
+              <div>
+                <h3 class="text-sm font-bold uppercase tracking-wide text-slate-500 mb-2">Resumen y reflexión</h3>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                  En biología vimos que el ADN guarda la información genética y que está formado por nucleótidos, cada uno con un azúcar, un fosfato y una base nitrogenada. Las bases del ADN son adenina, timina, citosina y guanina. En el ARN la timina se cambia por uracilo. Además, el ADN tiene doble cadena y el ARN una sola. Lo más útil fue la regla de Chargaff: la adenina se une con la timina y la citosina con la guanina, por eso A = T y C = G. Con esa regla se puede calcular el porcentaje y el número de cada base en el ADN de un cultivo.
+                </p>
+              </div>
+
+              <!-- Evidencia de trabajo -->
+              <div class="bg-teal-50/70 rounded-2xl p-5 border border-teal-200/80">
+                <h3 class="text-sm font-bold text-teal-950 mb-3 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-teal-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Evidencia de trabajo (ejercicio resuelto): Fragmento de ADN de chile (6,000 bases)
+                </h3>
+                <ul class="space-y-2 text-sm text-slate-800">
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-teal-700">•</span>
+                    <span>Un fragmento de ADN de chile tiene <strong>6,000 bases</strong> y la timina es el <strong>21%</strong>.</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-teal-700">•</span>
+                    <span>Como <strong>A = T</strong>, la adenina también es <strong>21%</strong>.</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-teal-700">•</span>
+                    <span><strong>A + T = 42%</strong>, así que <strong>C + G = 58%</strong> y cada una vale <strong>29%</strong>.</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-teal-700">•</span>
+                    <span><strong>Número de bases:</strong> A = 1,260, T = 1,260, C = 1,740 y G = 1,740.</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-teal-700">•</span>
+                    <span><strong>Comprobación:</strong> 1,260 + 1,260 + 1,740 + 1,740 = <strong>6,000</strong>.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Recurso recomendado -->
+              <div class="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-100">
+                <div class="text-sm text-slate-600">
+                  <strong class="text-slate-900">Recurso recomendado:</strong> Khan Academy en español.
+                </div>
+                <a href="https://es.khanacademy.org" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-agro-700 text-white text-xs font-semibold hover:bg-agro-800 transition shrink-0">
+                  Visitar Khan Academy
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ======================================================= -->
+        <!-- ENTRADA 3: TALLER DE ELEMENTOS DE MECÁNICA DE SÓLIDOS   -->
+        <!-- ======================================================= -->
+        <article data-category="Mecánica" class="post-card bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-12">
+            <!-- Multimedia: Diagrama SVG propio de resorte y Ley de Hooke -->
+            <div class="lg:col-span-4 bg-amber-950 p-6 flex flex-col items-center justify-center text-white relative">
+              <span class="absolute top-4 left-4 px-3 py-1.5 rounded-xl text-xs font-bold bg-white/95 text-amber-900 shadow-sm">
+                Categoría: Mecánica de sólidos
+              </span>
+              <!-- Dibujo SVG propio de un resorte con fuerza y estiramiento -->
+              <svg viewBox="0 0 240 220" class="w-56 h-48 mt-7" aria-label="Dibujo de un resorte bajo la Ley de Hooke mostrando fuerza F y estiramiento x">
+                <!-- Soporte fijo izquierdo -->
+                <rect x="18" y="35" width="10" height="110" fill="#d97706" rx="2"/>
+                <line x1="10" y1="45" x2="18" y2="55" stroke="#fcd34d" stroke-width="2"/>
+                <line x1="10" y1="65" x2="18" y2="75" stroke="#fcd34d" stroke-width="2"/>
+                <line x1="10" y1="85" x2="18" y2="95" stroke="#fcd34d" stroke-width="2"/>
+                <line x1="10" y1="105" x2="18" y2="115" stroke="#fcd34d" stroke-width="2"/>
+                <line x1="10" y1="125" x2="18" y2="135" stroke="#fcd34d" stroke-width="2"/>
+
+                <!-- Resorte estirado -->
+                <polyline points="28,90 45,90 55,68 70,112 85,68 100,112 115,68 130,112 145,90 162,90"
+                          fill="none" stroke="#fbbf24" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+
+                <!-- Masa / bloque -->
+                <rect x="162" y="72" width="28" height="36" rx="5" fill="#f59e0b" stroke="#fef3c7" stroke-width="1.5"/>
+                <text x="176" y="94" fill="#451a03" font-size="10" font-weight="bold" text-anchor="middle">k</text>
+
+                <!-- Vector Fuerza F -->
+                <line x1="190" y1="90" x2="225" y2="90" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
+                <polygon points="228,90 218,84 218,96" fill="#34d399"/>
+                <text x="208" y="80" fill="#6ee7b7" font-size="11" font-weight="bold" text-anchor="middle">F = 20 N</text>
+
+                <!-- Cota de estiramiento x -->
+                <line x1="125" y1="132" x2="162" y2="132" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="3,2"/>
+                <line x1="125" y1="126" x2="125" y2="138" stroke="#e2e8f0" stroke-width="1.5"/>
+                <line x1="162" y1="126" x2="162" y2="138" stroke="#e2e8f0" stroke-width="1.5"/>
+                <text x="144" y="152" fill="#fef3c7" font-size="10" font-weight="bold" text-anchor="middle">x = 0.04 m</text>
+
+                <!-- Fórmula -->
+                <rect x="55" y="170" width="130" height="28" rx="8" fill="rgba(255,255,255,0.12)"/>
+                <text x="120" y="188" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">F = k · x</text>
+              </svg>
+              <p class="text-xs text-amber-200 text-center mt-1">
+                Esquema propio: Resorte con constante k = 500 N/m y estiramiento x = 0.04 m
+              </p>
+            </div>
+
+            <!-- Contenido de la entrada -->
+            <div class="lg:col-span-8 p-6 sm:p-8 space-y-5">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-agro-600">Entrada 3 · Taller de elementos de mecánica de sólidos</p>
+                <h2 class="text-2xl font-extrabold text-slate-900 mt-1">
+                  Ley de Hooke: la elasticidad y sus ejemplos en el campo
+                </h2>
+              </div>
+
+              <!-- Resumen y reflexión -->
+              <div>
+                <h3 class="text-sm font-bold uppercase tracking-wide text-slate-500 mb-2">Resumen y reflexión</h3>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                  En Taller de elementos de mecánica de sólidos estudiamos cómo se deforman los materiales cuando se les aplica una fuerza. La ley de Hooke dice que, dentro del límite elástico, la fuerza es proporcional a la deformación: <strong>F = k · x</strong>, donde <em>k</em> es la constante del resorte y <em>x</em> es lo que se estira o se comprime. Si se pasa del límite elástico, el material ya no regresa a su forma original. Me pareció interesante porque se relaciona con el campo: un tallo se dobla con el viento y vuelve a su posición, pero si se pasa de su límite se queda caído, algo parecido al acame.
+                </p>
+              </div>
+
+              <!-- Evidencia de trabajo -->
+              <div class="bg-amber-50/70 rounded-2xl p-5 border border-amber-200/80 space-y-3">
+                <h3 class="text-sm font-bold text-amber-950 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Evidencia de trabajo
+                </h3>
+                <p class="text-sm text-slate-800 bg-white/80 p-3 rounded-xl border border-amber-200/60">
+                  <strong>Ejercicio:</strong> Un resorte con <strong>k = 500 N/m</strong> se estira <strong>0.04 m</strong>. La fuerza es <strong>F = 500 × 0.04 = 20 N</strong>.
+                </p>
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-wide text-amber-900 mb-1.5">Ejemplos en agronomía:</p>
+                  <ul class="space-y-1.5 text-sm text-slate-800">
+                    <li class="flex items-start gap-2">
+                      <span class="font-bold text-amber-700">•</span>
+                      <span>Los resortes de algunos implementos y sembradoras vuelven a su posición después de golpear una piedra.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="font-bold text-amber-700">•</span>
+                      <span>El dinamómetro o báscula de resorte sirve para pesar costales y cajas de fruta.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="font-bold text-amber-700">•</span>
+                      <span>Los tallos de los cultivos se doblan con el viento y se recuperan mientras no pasen su límite elástico.</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Recurso recomendado -->
+              <div class="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-100">
+                <div class="text-sm text-slate-600">
+                  <strong class="text-slate-900">Recurso recomendado:</strong> Simulaciones de PhET (Universidad de Colorado), gratis, donde puedes buscar "Ley de Hooke".
+                </div>
+                <a href="https://phet.colorado.edu" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-agro-700 text-white text-xs font-semibold hover:bg-agro-800 transition shrink-0">
+                  Visitar PhET Colorado
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- ======================================================= -->
+        <!-- ENTRADA 4: ÁLGEBRA LINEAL                               -->
+        <!-- ======================================================= -->
+        <article data-category="Álgebra" class="post-card bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-12">
+            <!-- Multimedia: Representación visual de Matriz A y Menor de orden 2 -->
+            <div class="lg:col-span-4 bg-slate-900 p-6 flex flex-col items-center justify-center text-white relative">
+              <span class="absolute top-4 left-4 px-3 py-1.5 rounded-xl text-xs font-bold bg-white/95 text-slate-900 shadow-sm">
+                Categoría: Álgebra lineal
+              </span>
+              <div class="mt-7 w-full max-w-[230px] bg-slate-800/90 border border-slate-700 rounded-2xl p-4 text-center space-y-3">
+                <p class="text-xs font-semibold text-indigo-300 uppercase tracking-wider">Matriz A (3 × 3)</p>
+                <div class="font-mono text-base tracking-widest bg-slate-950/70 py-3 px-2 rounded-xl border border-slate-700/80">
+                  <div>( <span class="text-emerald-400 font-bold">1</span> &nbsp; <span class="text-emerald-400 font-bold">2</span> &nbsp; 3 )</div>
+                  <div class="text-slate-400">( 2 &nbsp; 4 &nbsp; 6 )</div>
+                  <div>( <span class="text-emerald-400 font-bold">1</span> &nbsp; <span class="text-emerald-400 font-bold">0</span> &nbsp; 1 )</div>
+                </div>
+                <div class="text-xs text-slate-300 space-y-1">
+                  <p>det(A) = 0 &rarr; Rango &lt; 3</p>
+                  <p class="text-emerald-300 font-semibold">Menor 2×2: (1)(0) − (2)(1) = −2 &ne; 0</p>
+                  <p class="inline-block mt-1 px-2.5 py-0.5 rounded-md bg-indigo-500/20 text-indigo-200 font-bold">
+                    Rango(A) = 2
+                  </p>
+                </div>
+              </div>
+              <p class="text-xs text-slate-400 text-center mt-3">
+                Cálculo de menor de orden 2 sobre las filas 1 y 3 y columnas 1 y 2
+              </p>
+            </div>
+
+            <!-- Contenido de la entrada -->
+            <div class="lg:col-span-8 p-6 sm:p-8 space-y-5">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-agro-600">Entrada 4 · Bitácora IIAS</p>
+                <h2 class="text-2xl font-extrabold text-slate-900 mt-1">
+                  Rango de una matriz con el método de menores
+                </h2>
+              </div>
+
+              <!-- Resumen y reflexión -->
+              <div>
+                <h3 class="text-sm font-bold uppercase tracking-wide text-slate-500 mb-2">Resumen y reflexión</h3>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                  En álgebra lineal estamos trabajando con matrices. El rango de una matriz es el número de filas (o columnas) linealmente independientes, y también es el orden del mayor menor, es decir, del determinante de una submatriz cuadrada, que sea distinto de cero. Ayuda a saber si un sistema de ecuaciones tiene solución. En agronomía estos sistemas sirven, por ejemplo, para calcular mezclas de fertilizantes con cierta cantidad de nitrógeno, fósforo y potasio.
+                </p>
+              </div>
+
+              <!-- Evidencia de trabajo -->
+              <div class="bg-indigo-50/70 rounded-2xl p-5 border border-indigo-200/80">
+                <h3 class="text-sm font-bold text-indigo-950 mb-3 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-indigo-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Evidencia de trabajo (ejercicio resuelto)
+                </h3>
+                <ul class="space-y-2 text-sm text-slate-800">
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-indigo-700">•</span>
+                    <span><strong>Matriz A:</strong> fila 1 = (1, 2, 3), fila 2 = (2, 4, 6), fila 3 = (1, 0, 1).</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-indigo-700">•</span>
+                    <span>La fila 2 es el doble de la fila 1, así que el determinante de 3×3 vale 0 y el rango es menor que 3.</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-indigo-700">•</span>
+                    <span>Tomo un menor de orden 2, con las filas 1 y 3 y las columnas 1 y 2: <strong>1·0 − 2·1 = −2</strong>, que es distinto de cero.</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span class="font-bold text-indigo-700">•</span>
+                    <span><strong>Conclusión:</strong> el rango de A es <strong>2</strong>.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Recurso recomendado -->
+              <div class="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-100">
+                <div class="text-sm text-slate-600">
+                  <strong class="text-slate-900">Recurso recomendado:</strong> Serie "Esencia del álgebra lineal" de 3Blue1Brown, con subtítulos en español.
+                </div>
+                <a href="https://www.3blue1brown.com/topics/linear-algebra" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-agro-700 text-white text-xs font-semibold hover:bg-agro-800 transition shrink-0">
+                  Visitar 3Blue1Brown
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Pie de página -->
+  <footer class="bg-white border-t border-slate-200 mt-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="text-center sm:text-left">
+        <p class="font-semibold text-slate-700">Angel · Bitácora Universitaria de Ingeniería en Innovación Agrícola Sustentable (IIAS)</p>
+        <p class="mt-0.5">Ángel Guadalupe Morán Godínez · Grupo 1-B · Tecnológico Superior de Jalisco (TSJ Tala)</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <button onclick="navigateTo('inicio')" class="hover:text-agro-700 font-medium">Inicio</button>
+        <button onclick="navigateTo('sobre-mi')" class="hover:text-agro-700 font-medium">Sobre mí</button>
+        <button onclick="navigateTo('materias')" class="hover:text-agro-700 font-medium">Mis materias</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lógica de navegación entre páginas y filtro de materias -->
+  <script>
+    function navigateTo(sectionId) {
+      // Ocultar todas las secciones
+      document.querySelectorAll('.page-section').forEach(sec => {
+        sec.classList.add('hidden');
+      });
+
+      // Mostrar la sección elegida
+      const target = document.getElementById('section-' + sectionId);
+      if (target) {
+        target.classList.remove('hidden');
+      }
+
+      // Actualizar estado activo de botones en barra superior
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('tab-active');
+        btn.classList.add('text-slate-600', 'hover:bg-agro-50', 'hover:text-agro-800');
+      });
+
+      const activeBtn = document.getElementById('nav-' + sectionId);
+      if (activeBtn) {
+        activeBtn.classList.add('tab-active');
+        activeBtn.classList.remove('text-slate-600', 'hover:bg-agro-50', 'hover:text-agro-800');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    function filterPosts(category) {
+      // Actualizar estilo de botones de filtro
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-filter') === category) {
+          btn.classList.remove('bg-slate-100', 'text-slate-700');
+          btn.classList.add('bg-agro-700', 'text-white');
+        } else {
+          btn.classList.remove('bg-agro-700', 'text-white');
+          btn.classList.add('bg-slate-100', 'text-slate-700');
+        }
+      });
+
+      // Filtrar tarjetas de materias
+      document.querySelectorAll('.post-card').forEach(card => {
+        if (category === 'Todas' || card.getAttribute('data-category') === category) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    function openSubject(category) {
+      navigateTo('materias');
+      filterPosts(category);
+    }
+  </script>
+</body>
+</html>
